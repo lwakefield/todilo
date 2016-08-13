@@ -38,6 +38,8 @@ path `/tasks` makes assumptions about the data that you want.
 
 GET /user/:id/tasks - return tasks
 POST /user/:id/tasks - create a new task and return the created task
+PATCH /user/:id/tasks - make a bulk change to all tasks
+DELETE /user/:id/tasks - delete all tasks
 
 GET /user/:id/tasks/:id - return a task
 PATCH /user/:id/tasks/:id - update a task and return the updated task
@@ -58,3 +60,8 @@ This is what I want the markup to look like.
   <footer>
   </footer>
 </app>
+
+## Todo
+
+- [ ] - http://docs.peewee-orm.com/projects/flask-peewee/en/latest/rest-api.html
+- There is no list of exceptions in the PeeWee docs?

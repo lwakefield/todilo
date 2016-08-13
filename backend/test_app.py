@@ -97,5 +97,71 @@ class FlaskrTestCase(unittest.TestCase):
 
         assert Todo.get(Todo.id == data['id']) != None
 
+    def give_task(self, user_id):
+        user = User.get(User.id == user_id)
+        text = rand_str(16)
+        todo = Todo.create(text=text, user=user)
+        return {'id': todo.id, 'text': text}
+
+    def test_get_tasks(self):
+        auth_token, user = self.new_session()
+        tasks = [
+            self.give_task(user['id']),
+            self.give_task(user['id']),
+            self.give_task(user['id'])
+        ]
+
+        res = self.app.get('/users/{0}/tasks'.format(user['id']),
+            headers={'Authorization': 'Bearer {0}'.format(auth_token)})
+
+        assert res.status_code == 200
+        data = loads(res.data)
+        assert data[0] != None
+        assert data[1] != None
+        assert data[2] != None
+
+    def test_get_task(self):
+        auth_token, user = self.new_session()
+        todo = self.give_task(user['id'])
+
+        res = self.app.get(
+            '/users/{0}/tasks/{1}'.format(user['id'], todo['id']),
+            headers={'Authorization': 'Bearer {0}'.format(auth_token)})
+
+        assert res.status_code == 200
+        data = loads(res.data)
+        assert data['id'] == todo['id']
+        assert data['text'] == todo['text']
+
+    def test_get_task_with_wrong_auth(self):
+        _, user = self.new_session()
+        todo = self.give_task(user['id'])
+
+        fake_auth_token, fake_user = self.new_session()
+
+        res = self.app.get(
+            '/users/{0}/tasks/{1}'.format(fake_user['id'], todo['id']),
+            headers={'Authorization': 'Bearer {0}'.format(fake_auth_token)})
+
+        assert res.status_code == 401
+
+    def test_update_task(self):
+        auth_token, user = self.new_session()
+        todo = self.give_task(user['id'])
+        new_text = rand_str(16)
+
+        res = self.app.patch('/users/{0}/tasks/{1}'.format(user['id'], todo['id']),
+            headers={'Authorization': 'Bearer {0}'.format(auth_token)},
+            data=dumps({'text': new_text, 'completed': True}))
+
+        assert res.status_code == 200
+        # data = loads(res.data)
+        # assert data['text'] == new_text
+        # assert data['completed'] == True
+
+        updated_todo = Todo.get(Todo.id == todo['id'])
+        assert updated_todo.text == new_text
+        assert updated_todo.completed == True
+
 if __name__ == '__main__':
     unittest.main()

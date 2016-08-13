@@ -86,7 +86,7 @@ def get_user(id):
         model_to_dict(user, exclude=[User.password])
     )
 
-@app.route('/users/<user_id>/tasks', methods=['POST'])
+@app.route('/users/<int:user_id>/tasks', methods=['POST'])
 @requires_auth
 def new_task(user_id):
     if not is_user(user_id): return Response(status=401)
@@ -101,6 +101,39 @@ def new_task(user_id):
     return jsonify(
         model_to_dict(todo, exclude=[Todo.user])
     )
+
+@app.route('/users/<int:user_id>/tasks', methods=['GET'])
+@requires_auth
+def get_tasks(user_id):
+    if not is_user(user_id): return Response(status=401)
+
+    todos = Todo.select().join(User).where(User.id == user_id)
+
+    return jsonify(
+        [model_to_dict(t, exclude=[Todo.user]) for t in todos]
+    )
+
+@app.route('/users/<int:user_id>/tasks/<int:todo_id>', methods=['GET'])
+@requires_auth
+def get_task(user_id, todo_id):
+    if not is_user(user_id): return Response(status=401)
+
+    todo = Todo.get(Todo.id == todo_id)
+    if todo.user_id != user_id: return Response(status=401)
+    return jsonify(model_to_dict(todo))
+
+@app.route('/users/<int:user_id>/tasks/<int:todo_id>', methods=['PATCH'])
+@requires_auth
+def update_task(user_id, todo_id):
+    if not is_user(user_id): return Response(status=401)
+
+    data = request.get_json(force=True)
+
+    todo = Todo.get(Todo.id == todo_id)
+    if todo.user_id != user_id: return Response(status=401)
+    todo.update(**data).execute()
+
+    return jsonify(model_to_dict(todo))
 
 def main():
     init_db()
