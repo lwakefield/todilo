@@ -126,14 +126,26 @@ def get_task(user_id, todo_id):
 @requires_auth
 def update_task(user_id, todo_id):
     if not is_user(user_id): return Response(status=401)
-
-    data = request.get_json(force=True)
-
     todo = Todo.get(Todo.id == todo_id)
     if todo.user_id != user_id: return Response(status=401)
+
+    data = request.get_json(force=True)
     todo.update(**data).execute()
 
-    return jsonify(model_to_dict(todo))
+    updated_data = model_to_dict(todo)
+    updated_data.update(data)
+    return jsonify(updated_data)
+
+@app.route('/users/<int:user_id>/tasks/<int:todo_id>', methods=['DELETE'])
+@requires_auth
+def delete_task(user_id, todo_id):
+    if not is_user(user_id): return Response(status=401)
+    todo = Todo.get(Todo.id == todo_id)
+    if todo.user_id != user_id: return Response(status=401)
+
+    todo.delete_instance()
+
+    return jsonify()
 
 def main():
     init_db()

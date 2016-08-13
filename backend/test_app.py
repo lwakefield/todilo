@@ -155,13 +155,24 @@ class FlaskrTestCase(unittest.TestCase):
             data=dumps({'text': new_text, 'completed': True}))
 
         assert res.status_code == 200
-        # data = loads(res.data)
-        # assert data['text'] == new_text
-        # assert data['completed'] == True
+        data = loads(res.data)
+        assert data['text'] == new_text
+        assert data['completed'] == True
 
         updated_todo = Todo.get(Todo.id == todo['id'])
         assert updated_todo.text == new_text
         assert updated_todo.completed == True
+
+    def test_delete_task(self):
+        auth_token, user = self.new_session()
+        todo = self.give_task(user['id'])
+
+        res = self.app.delete('/users/{0}/tasks/{1}'.format(user['id'], todo['id']),
+            headers={'Authorization': 'Bearer {0}'.format(auth_token)})
+
+        assert res.status_code == 200
+        assert Todo.select().where(Todo.id == todo['id']).count() == 0
+
 
 if __name__ == '__main__':
     unittest.main()
