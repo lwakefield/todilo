@@ -78,11 +78,24 @@ class FlaskrTestCase(unittest.TestCase):
 
     def test_get_user_with_wrong_auth(self):
         _, user = self.new_session()
-        user_id = user['id']
         fake_auth_token, _ = self.new_session()
         res = self.app.get('/users/{0}'.format(user['id']),
             headers={'Authorization': 'Bearer {0}'.format(fake_auth_token)})
         assert res.status_code == 401
+
+    def test_new_task(self):
+        auth_token, user = self.new_session()
+        todo = {'text': 'hello world'}
+        res = self.app.post('/users/{0}/tasks'.format(user['id']),
+            headers={'Authorization': 'Bearer {0}'.format(auth_token)},
+            data=dumps(todo))
+        assert res.status_code == 200
+        data = loads(res.data)
+        assert data['id'] != None
+        assert data['text'] == 'hello world'
+        assert data['completed'] == False
+
+        assert Todo.get(Todo.id == data['id']) != None
 
 if __name__ == '__main__':
     unittest.main()
