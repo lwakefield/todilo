@@ -7,7 +7,7 @@ import random
 import string
 
 import app
-from app import User, Todo
+from app import User, Todo, new_user, get_auth_token
 
 def rand_str(n):
     all_chars = string.ascii_uppercase + string.ascii_lowercase + string.digits
@@ -25,60 +25,63 @@ class FlaskrTestCase(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def signup(self):
-        user_data = {
-            'username': rand_str(16),
-            'password': rand_str(16)
-        }
-        rv = self.app.post('/users', data=dumps(user_data))
-        return (user_data, rv)
-
     def test_signup(self):
-        user_data, rv = self.signup()
-        assert rv.status_code == 200
-        data = loads(rv.data)
-        assert data['username'] == user_data['username']
+        user = { 'username': rand_str(16), 'password': rand_str(16) }
+        res = self.app.post('/users', data=dumps(user))
+        assert res.status_code == 200
+        data = loads(res.data)
+        assert data['username'] == user['username']
         assert 'password' not in data
         assert 'id' in data
 
-        user = User.get(User.id == data['id'])
-        assert user is not None
+        assert User.get(User.id == data['id']) != None
 
-    def login(self, data):
-         return self.app.post('/login', data=dumps(data))
+    def new_user(self):
+        username = rand_str(16)
+        password = rand_str(16)
+        user = new_user(username, password)
+        return {'id': user.id, 'username': username, 'password': password}
 
     def test_login(self):
-        user_data, rv = self.signup()
-        rv = self.login(user_data)
-        assert rv.status_code == 200
-        data = loads(rv.data)
+        user = self.new_user()
+        res = self.app.post('/login', data=dumps({
+            'username': user['username'],
+            'password': user['password']
+        }))
+        assert res.status_code == 200
+        data = loads(res.data)
         assert data['auth_token'] != None
 
+    def test_login_with_wrong_auth(self):
+        user = self.new_user()
         fake_user = {
-            'username': user_data['username'],
+            'username': user['username'],
             'password': 'fake'
         }
-        rv = self.app.post('/login', data=dumps(fake_user))
-        assert rv.status_code == 401
+        res = self.app.post('/login', data=dumps(fake_user))
+        assert res.status_code == 401
+
+    def new_session(self):
+        user = self.new_user()
+        auth_token = get_auth_token(user['username'], user['password'])
+        return (auth_token, user)
 
     def test_get_user(self):
-        user_data, r = self.signup()
-        user_id = loads(r.data)['id']
-        r = self.login(user_data)
-        auth_token = loads(r.data)['auth_token']
+        auth_token, user = self.new_session()
 
-        res = self.app.get('/users/{0}'.format(user_id),
+        res = self.app.get('/users/{0}'.format(user['id']),
             headers={'Authorization': 'Bearer {0}'.format(auth_token)})
         assert res.status_code == 200
         data = loads(res.data)
-        assert data['id'] == user_id
-        assert data['username'] == user_data['username']
+        assert data['id'] == user['id']
+        assert data['username'] == user['username']
 
-        fake_user_data, r = self.signup()
-        r = self.login(fake_user_data)
-        auth_token = loads(r.data)['auth_token']
-        res = self.app.get('/users/{0}'.format(user_id),
-            headers={'Authorization': 'Bearer {0}'.format(auth_token)})
+    def test_get_user_with_wrong_auth(self):
+        _, user = self.new_session()
+        user_id = user['id']
+        fake_auth_token, _ = self.new_session()
+        res = self.app.get('/users/{0}'.format(user['id']),
+            headers={'Authorization': 'Bearer {0}'.format(fake_auth_token)})
         assert res.status_code == 401
 
 if __name__ == '__main__':

@@ -20,7 +20,7 @@ class User(db.Model):
 
 class Todo(db.Model):
     text = TextField()
-    user = ForeignKeyField(User, related_name='todos')
+    user = ForeignKeyField(User)
     completed = BooleanField(default=False)
 
 @app.route('/users', methods=['POST'])
@@ -29,12 +29,13 @@ def signup():
     username = data['username']
     password = data['password'].encode('ascii')
 
-    hashed_password = bcrypt.hashpw(password, bcrypt.gensalt())
-    user = User.create(username=username, password=hashed_password)
-
+    user = new_user(username, password)
     return jsonify(
         model_to_dict(user, exclude=[User.password])
     )
+def new_user(username, password):
+    hashed_password = bcrypt.hashpw(password, bcrypt.gensalt())
+    return User.create(username=username, password=hashed_password)
 
 @app.route('/login', methods=['POST'])
 def login():
@@ -42,17 +43,20 @@ def login():
     username = data['username']
     password = data['password'].encode('ascii')
 
+    auth_token = get_auth_token(username, password)
+    if auth_token == None: return Response(status=401)
+
+    return jsonify({ 'auth_token': auth_token })
+def get_auth_token(username, password):
     user = User.get(User.username == username)
     hashed_password = user.password.encode('ascii')
     verified = bcrypt.hashpw(password, hashed_password) == hashed_password
-    if not verified: return Response(status=401)
 
-    auth_token = jwt.encode({
+    if not verified: return None
+
+    return jwt.encode({
         'id': user.id, 'username': user.username
     }, app.config['secret'], algorithm='HS256')
-    return jsonify({
-        'auth_token': auth_token
-    })
 
 def requires_auth(f):
     @wraps(f)
@@ -69,14 +73,33 @@ def get_auth():
     auth_token = request.headers['Authorization'].replace('Bearer ', '')
     return jwt.decode(auth_token, app.config['secret'])
 
+def is_user(id):
+    return int(get_auth()['id']) == int(id)
+
 @app.route('/users/<id>', methods=['GET'])
 @requires_auth
-def getUser(id):
-    if int(get_auth()['id'] )!= int(id): return Response(status=401)
+def get_user(id):
+    if not is_user(id): return Response(status=401)
 
     user = User.get(User.id == id)
     return jsonify(
         model_to_dict(user, exclude=[User.password])
+    )
+
+@app.route('/users/<user_id>/tasks', methods=['POST'])
+@requires_auth
+def new_task(user_id):
+    if not is_user(user_id): return Response(status=401)
+
+    data = request.get_json(force=True)
+    text = data['text']
+    completed = data['completed'] if 'completed' in data else False
+
+    user = User.get(User.id == user_id)
+    todo = Todo.create(text=text, completed=completed, user=user)
+
+    return jsonify(
+        model_to_dict(todo, exclude=[Todo.user])
     )
 
 def main():
