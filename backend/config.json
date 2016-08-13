@@ -1,0 +1,5 @@
+{
+    "DATABASE": "sqlite:///todo.db",
+    "secret": "KL3qSCJiR9heh5mFKqY6U9CcZc8im6yywKH6VvFcIrlL5zQt02sDwob2b84tlhJe",
+    "env": "development"
+}
