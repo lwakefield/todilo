@@ -18,8 +18,16 @@ function get (url, headers = {}) {
     .catch(reject)
   })
 }
-function getAuthHeader (authToken) {
-  return {Authorization: `Bearer ${authToken}`}
+function getAuthToken () {
+  return localStorage.getItem('auth_token')
+}
+function getClaims () {
+  const token = getAuthToken()
+  if (!token) return undefined
+  return decodeJwt(token).claims
+}
+function getAuthHeader () {
+  return {Authorization: `Bearer ${getAuthToken()}`}
 }
 
 const Api = {
@@ -30,16 +38,16 @@ const Api = {
   login (username, password) {
     return post(`${this.endpoint}/login`, {username, password})
   },
-  newTask (token, task) {
-    const userId = decodeJwt(token).claims.id
+  newTask (task) {
+    const userId = getClaims().id
     return post(
-      `${this.endpoint}/users/${userId}/tasks`, task, getAuthHeader(token)
+      `${this.endpoint}/users/${userId}/tasks`, task, getAuthHeader()
     )
   },
-  getAllTasks (token) {
-    const userId = decodeJwt(token).claims.id
+  getAllTasks () {
+    const userId = getClaims().id
     return get(
-      `${this.endpoint}/users/${userId}/tasks`, getAuthHeader(token)
+      `${this.endpoint}/users/${userId}/tasks`, getAuthHeader()
     )
   }
 }

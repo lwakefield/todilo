@@ -4,6 +4,11 @@ import Api from '../../src/api'
 Api.endpoint = 'http://localhost:5000'
 
 const randStr = () => Math.random().toString(36).slice(2)
+const localStorage = {
+  data: {},
+  getItem (key) { return this.data[key] },
+  setItem (key, val) { this.data[key] = val }
+}
 
 describe('Api', () => {
   it('can signup', done => {
@@ -21,12 +26,12 @@ describe('Api', () => {
     .then(() => Api.login(username, password))
     .then(v => {
       expect(v).to.have.property('auth_token')
-      authToken = v.auth_token
+      localStorage.setItem('auth_token', v.auth_token)
       done()
     })
   })
   it('can create a task', done => {
-    Api.newTask(authToken, {text: 'hello world'})
+    Api.newTask({text: 'hello world'})
     .then(v => {
       expect(v).to.have.property('id')
       expect(v).to.have.property('text')
@@ -35,7 +40,7 @@ describe('Api', () => {
     })
   })
   it('can list all tasks', done => {
-    Api.getAllTasks(authToken)
+    Api.getAllTasks()
     .then(v => {
       expect(v).to.be.a('array')
       done()
