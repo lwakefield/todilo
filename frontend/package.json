@@ -4,7 +4,7 @@
   "description": "We are only interested in a single store, Todos. We do want authentication.",
   "main": "proxy.js",
   "scripts": {
-    "test": "mocha --compilers js:babel-core/register",
+    "unit": "mocha --compilers js:babel-core/register test/unit",
     "test-and-watch": "mocha --compilers js:babel-core/register --watch",
     "dev": "webpack-dev-server --config webpack.dev.conf.js --progress --inline --hot",
     "build": "webpack --config webpack.dev.conf.js -p"
