@@ -5,7 +5,9 @@
   "main": "proxy.js",
   "scripts": {
     "unit": "mocha --compilers js:babel-core/register test/unit",
-    "test-and-watch": "mocha --compilers js:babel-core/register --watch",
+    "e2e": "chimp --mocha --path test/e2e",
+    "e2e-and-watch": "chimp --mocha --watch --path test/e2e",
+    "unit-and-watch": "mocha --compilers js:babel-core/register --watch test/unit",
     "dev": "webpack-dev-server --config webpack.dev.conf.js --progress --inline --hot",
     "build": "webpack --config webpack.dev.conf.js -p"
   },
@@ -18,6 +20,7 @@
     "babel-plugin-transform-react-jsx": "^6.8.0",
     "babel-preset-es2015": "^6.13.2",
     "chai": "^3.5.0",
+    "chimp": "^0.40.4",
     "css-loader": "^0.23.1",
     "eslint": "^3.3.0",
     "eslint-config-standard": "^5.3.5",
