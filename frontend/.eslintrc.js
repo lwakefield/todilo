@@ -11,6 +11,11 @@ module.exports = {
       "jsx": true
     }
   },
+  globals: {
+    'atob': true,
+    localStorage: true,
+    API_ENDPOINT: true
+  },
   // add your custom rules here
   'rules': {
     "no-unused-vars": [0, { "varsIgnorePattern": "^h$" }],
