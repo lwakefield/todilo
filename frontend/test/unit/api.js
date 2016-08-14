@@ -9,6 +9,7 @@ const localStorage = {
   getItem (key) { return this.data[key] },
   setItem (key, val) { this.data[key] = val }
 }
+global.localStorage = localStorage
 
 describe('Api', () => {
   it('can signup', done => {
