@@ -44,7 +44,7 @@ export default class Store {
   }
 
   unsubscribe (sub) {
-    this.subscriptions[action] = this.subscriptions.filter(v => v !== sub)
+    this.subscriptions = this.subscriptions.filter(v => v !== sub)
   }
 
   on (action, listener) {
