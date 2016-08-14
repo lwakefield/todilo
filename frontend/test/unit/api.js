@@ -14,12 +14,30 @@ describe('Api', () => {
       done()
     })
   })
+  let authToken
   it('can login', done => {
     const [username, password] = [randStr(), randStr()]
     Api.signup(username, password)
     .then(() => Api.login(username, password))
     .then(v => {
       expect(v).to.have.property('auth_token')
+      authToken = v.auth_token
+      done()
+    })
+  })
+  it('can create a task', done => {
+    Api.newTask(authToken, {text: 'hello world'})
+    .then(v => {
+      expect(v).to.have.property('id')
+      expect(v).to.have.property('text')
+      expect(v).to.have.property('completed')
+      done()
+    })
+  })
+  it('can list all tasks', done => {
+    Api.getAllTasks(authToken)
+    .then(v => {
+      expect(v).to.be.a('array')
       done()
     })
   })
