@@ -49,7 +49,7 @@ export default class App extends Component {
           ref={v => { this.username = v }}/>
         <input type="password" placeholder="mysecretpassword" name="password"
           ref={v => { this.password = v }}/>
-        <button>login</button>
+        <button onClick={() => this.login()}>login</button>
         <span>/</span>
         <button onClick={() => this.signup()}>signup</button>
       </form>
@@ -60,6 +60,17 @@ export default class App extends Component {
     Api.signup(user, pass)
     .then(() => Api.login(user, pass))
     .then(v => {
+      this.username.value = ''
+      this.password.value = ''
+      Auth.dispatch('setAuthToken', v.auth_token)
+    })
+  }
+  login () {
+    const [user, pass] = [this.username.value, this.password.value]
+    Api.login(user, pass)
+    .then(v => {
+      this.username.value = ''
+      this.password.value = ''
       Auth.dispatch('setAuthToken', v.auth_token)
     })
   }
