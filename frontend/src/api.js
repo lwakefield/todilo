@@ -39,15 +39,15 @@ const Api = {
     return post(`${this.endpoint}/login`, {username, password})
   },
   newTask (task) {
-    const userId = getClaims().id
+    const claims = getClaims()
     return post(
-      `${this.endpoint}/users/${userId}/tasks`, task, getAuthHeader()
+      `${this.endpoint}/users/${claims.id}/tasks`, task, getAuthHeader()
     )
   },
   getAllTasks () {
-    const userId = getClaims().id
+    const claims = getClaims()
     return get(
-      `${this.endpoint}/users/${userId}/tasks`, getAuthHeader()
+      `${this.endpoint}/users/${claims.id}/tasks`, getAuthHeader()
     )
   }
 }

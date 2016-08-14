@@ -48,4 +48,12 @@ describe('Todilo @watch', () => {
     expect(browser.isExisting('form.login-signup-form')).to.eql(false)
     expect(browser.isExisting(`.top-left*=Hi ${user}`)).to.eql(true)
   })
+  it('adds a task', () => {
+    let text = randStr()
+    browser.setValue('.new-todo-form input', text)
+    browser.click('.new-todo-form button')
+    browser.waitUntil(() => {
+      return browser.isExisting(`.todo*=${text}`)
+    }, 5000)
+  })
 })

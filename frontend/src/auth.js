@@ -21,5 +21,6 @@ const auth = new Store({
     this.isAuthed = !!authToken
   }
 })
+auth.dispatch('update')
 
 export default auth
