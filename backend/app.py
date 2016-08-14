@@ -6,12 +6,14 @@ import json
 import bcrypt
 import jwt
 from functools import wraps
+from flask_cors import CORS, cross_origin
 
 from peewee import *
 from playhouse.flask_utils import FlaskDB
 from playhouse.shortcuts import model_to_dict
 
 app = Flask(__name__)
+CORS(app)
 with open(app.root_path+'/config.json') as f:
     app.config.update(json.loads(f.read()))
 db = FlaskDB(app)
