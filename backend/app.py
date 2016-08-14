@@ -153,7 +153,9 @@ def delete_task(user_id, todo_id):
 
 def main():
     init_db()
-    app.run(debug=True)
+    from gevent.wsgi import WSGIServer
+    http_server = WSGIServer(('', 5000), app)
+    http_server.serve_forever()
 
 def init_db():
     if app.config['env'] in ['testing', 'development']:
