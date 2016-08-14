@@ -65,3 +65,6 @@ This is what I want the markup to look like.
 
 - [ ] - http://docs.peewee-orm.com/projects/flask-peewee/en/latest/rest-api.html
 - There is no list of exceptions in the PeeWee docs?
+- [ ] Tasks should be named Todos instead
+- [ ] Title should be 'Todilo'
+- [ ] Todos should have a priority

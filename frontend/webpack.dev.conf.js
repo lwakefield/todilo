@@ -14,6 +14,7 @@ module.exports = {
   },
   resolve: {
     extensions: ['', '.js', '.jsx', '.css'],
+    root: [path.join(__dirname, './src')],
     fallback: [path.join(__dirname, '../node_modules')],
     alias: {
       'src': path.resolve(__dirname, './src'),
@@ -22,11 +23,11 @@ module.exports = {
   },
   module: {
     preLoaders: [
-      { test: /\.jsx?$/, exclude: 'node_modules', loader: 'eslint'}
+      { test: /\.jsx?$/, exclude: 'node_modules', loader: 'eslint' }
     ],
     loaders: [
       { test: /\.jsx?$/, loader: 'babel', exclude: /node_modules/ },
-      { test: /\.css$/, loader: '!style!css?[name]__[local]___[hash:base64:5!postcss'}
+      { test: /\.css$/, loader: 'style!css!postcss' }
     ]
   },
   postcss: function () {
