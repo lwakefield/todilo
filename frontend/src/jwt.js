@@ -10,7 +10,7 @@ export function decodeJwt (token) {
     return {
       header: JSON.parse(atob(header)),
       claims: JSON.parse(atob(claims)),
-      signature: atob(signature)
+      signature: signature
     }
   } catch (e) { console.log(e) }
   return undefined
