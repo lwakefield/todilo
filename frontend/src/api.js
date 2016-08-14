@@ -2,6 +2,14 @@
 import { request, plugins } from 'popsicle'
 import { decodeJwt, hello } from './jwt'
 
+function patch (url, body, headers = {}) {
+  return new Promise((resolve, reject) => {
+    request({ method: 'PATCH', url, body, headers })
+    .use(plugins.parse('json'))
+    .then(v => resolve(v.body))
+    .catch(reject)
+  })
+}
 function post (url, body, headers = {}) {
   return new Promise((resolve, reject) => {
     request({ method: 'POST', url, body, headers })
@@ -48,6 +56,12 @@ const Api = {
     const claims = getClaims()
     return get(
       `${this.endpoint}/users/${claims.id}/tasks`, getAuthHeader()
+    )
+  },
+  updateTask (id, task) {
+    const claims = getClaims()
+    return patch(
+      `${this.endpoint}/users/${claims.id}/tasks/${id}`, task, getAuthHeader()
     )
   }
 }

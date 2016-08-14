@@ -56,4 +56,14 @@ describe('Todilo @watch', () => {
       return browser.isExisting(`.todo*=${text}`)
     }, 5000)
   })
+  it('completes a task', () => {
+    browser.click('.todo:first-child')
+    const classes = browser.getAttribute('.todo:first-child', 'class')
+    expect(classes).to.eql('todo todo-done')
+  })
+  it('uncompletes a task', () => {
+    browser.click('.todo:first-child')
+    const classes = browser.getAttribute('.todo:first-child', 'class')
+    expect(classes).to.eql('todo')
+  })
 })

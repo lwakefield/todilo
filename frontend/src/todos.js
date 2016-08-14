@@ -8,6 +8,10 @@ const todos = new Store({
   },
   addTodo (todo) {
     this.todos.push(todo)
+  },
+  updateTodo (todo) {
+    const index = this.todos.findIndex(v => v.id === todo.id)
+    this.todos[index] = todo
   }
 })
 

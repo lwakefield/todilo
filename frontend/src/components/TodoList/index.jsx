@@ -11,7 +11,7 @@ export default class TodoList extends Component {
     this.state.todos = Todos.todos
   }
   componentWillMount () {
-    Todos.subscribe((k, v) => { this.setState(v) })
+    Todos.subscribe((k, v) => this.setState(v))
     if (Auth.isAuthed) {
       Api.getAllTasks().then(v => Todos.dispatch('update', v))
     }
@@ -20,43 +20,26 @@ export default class TodoList extends Component {
     return (
       <ul class="todo-list">
         { this.renderList() }
-        <li class="todo">
-          <label>
-            <input type="checkbox"/>
-            <span>Discuss report with John</span>
-          </label>
-        </li>
-        <li class="todo todo-done">
-          <label>
-            <input type="checkbox" checked="true"/>
-            <span>Get a haircut</span>
-          </label>
-        </li>
-        <li class="todo todo-done">
-          <label>
-            <input type="checkbox" checked="true"/>
-            <span>Pay electricity bill</span>
-          </label>
-        </li>
-        <li class="todo">
-          <label>
-            <input type="checkbox"/>
-            <span>Check gym hours</span>
-          </label>
-        </li>
       </ul>
     )
   }
   renderList () {
     return this.state.todos.map(v => {
+      const classes = v.completed ? 'todo todo-done' : 'todo'
       return (
-        <li class="todo" key={v.id}>
+        <li class={classes} key={v.id}>
           <label>
-            <input type="checkbox"/>
+            <input type="checkbox" onChange={() => this.toggleComplete(v)}
+            checked={v.completed}/>
             <span>{v.text}</span>
           </label>
         </li>
       )
     })
+  }
+  toggleComplete (todo) {
+    const completed = !todo.completed
+    Api.updateTask(todo.id, {completed})
+    .then(v => Todos.dispatch('updateTodo', v))
   }
 }
