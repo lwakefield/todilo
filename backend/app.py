@@ -134,7 +134,7 @@ def update_task(user_id, todo_id):
     if todo.user_id != user_id: return Response(status=401)
 
     data = request.get_json(force=True)
-    todo.update(**data).execute()
+    Todo.update(**data).where(Todo.id == todo_id).execute()
 
     updated_data = model_to_dict(todo)
     updated_data.update(data)
