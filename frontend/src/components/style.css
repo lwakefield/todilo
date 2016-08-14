@@ -68,10 +68,10 @@ button {
 }
 .top-left {
     font-size: 12px;
+    padding: 1rem;
 }
 @media (min-width: 500px) and (min-height: 550px) {
     .top-left {
-        padding: 1rem;
         position: absolute;
         top: 0;
         right: 0;
