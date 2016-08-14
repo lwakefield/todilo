@@ -28,6 +28,7 @@ h1 {
 }
 
 input[type="text"],
+input[type="password"],
 button {
     font: inherit;
     border: 1px solid #B7B6B6;
@@ -36,7 +37,8 @@ button {
     height: 40px;
     font-size: 12px;
 }
-input[type="text"] {
+input[type="text"],
+input[type="password"] {
     background-color: #FEFEFE;
 }
 button {
@@ -44,6 +46,36 @@ button {
     color: #6A6969;
     font-weight: bolder;
     min-width: 145px;
+    cursor: pointer;
+}
+
+.login-signup-form {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+.login-signup-form input {
+    height: 20px;
+    margin-right: 5px;
+}
+.top-left button {
+    background: none;
+    border: none;
+    padding: 0;
+    height: initial;
+    min-width: initial;
+    color: #3689CE;
+}
+.top-left {
+    font-size: 12px;
+}
+@media (min-width: 500px) and (min-height: 550px) {
+    .top-left {
+        padding: 1rem;
+        position: absolute;
+        top: 0;
+        right: 0;
+    }
 }
 
 .app {
