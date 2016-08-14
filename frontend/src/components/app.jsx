@@ -6,17 +6,21 @@ import './style.css'
 
 import Api from 'src/api'
 import Auth from 'src/auth'
+import Todos from 'src/todos'
 
 export default class App extends Component {
   constructor () {
     super()
     this.state.isAuthed = Auth.isAuthed
+    this.state.todos = Todos.todos
   }
   componentWillMount () {
     Auth.subscribe((k, v) => { this.setState(v) })
     Auth.dispatch('update')
+    Todos.subscribe((k, v) => { this.setState(v) })
   }
   render () {
+    let tasksRemaining = this.state.todos.filter(v => !v.completed).length
     return (
       <div>
         <div className="top-left">
@@ -29,7 +33,7 @@ export default class App extends Component {
           <NewTodoForm/>
           <TodoList/>
           <footer class="app-footer">
-            <span>2 items left</span>
+            <span>{tasksRemaining} items left</span>
             <button class="complete-all-btn">Mark all as complete</button>
           </footer>
         </div>
