@@ -1,4 +1,6 @@
-import atob from 'atob'
+let atob = typeof window === 'undefined'
+? v => new Buffer(v, 'base64').toString('binary')
+: window.atob
 
 export function decodeJwt (token) {
   if (!token) return undefined
