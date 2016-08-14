@@ -1,6 +1,7 @@
 import { h, Component } from 'preact'
 import NewTodoForm from 'components/NewTodoForm'
 import TodoList from 'components/TodoList'
+import LoginSignupForm from 'components/LoginSignupForm'
 import './style.css'
 
 import Api from 'src/api'
@@ -43,36 +44,7 @@ export default class App extends Component {
       </div>
     }
 
-    return (
-      <form class="login-signup-form" onSubmit={e => e.preventDefault()}>
-        <input type="text" placeholder="user79" name="username"
-          ref={v => { this.username = v }}/>
-        <input type="password" placeholder="mysecretpassword" name="password"
-          ref={v => { this.password = v }}/>
-        <button onClick={() => this.login()}>login</button>
-        <span>/</span>
-        <button onClick={() => this.signup()}>signup</button>
-      </form>
-    )
-  }
-  signup () {
-    const [user, pass] = [this.username.value, this.password.value]
-    Api.signup(user, pass)
-    .then(() => Api.login(user, pass))
-    .then(v => {
-      this.username.value = ''
-      this.password.value = ''
-      Auth.dispatch('setAuthToken', v.auth_token)
-    })
-  }
-  login () {
-    const [user, pass] = [this.username.value, this.password.value]
-    Api.login(user, pass)
-    .then(v => {
-      this.username.value = ''
-      this.password.value = ''
-      Auth.dispatch('setAuthToken', v.auth_token)
-    })
+    return <LoginSignupForm/>
   }
   logout () {
     Auth.dispatch('setAuthToken', undefined)
