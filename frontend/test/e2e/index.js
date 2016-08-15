@@ -60,6 +60,9 @@ describe('Todilo @watch', () => {
       expect(td).to.eql('line-through')
     })
   })
+  it.skip('moves an element', () => {
+    // webdriver.io doesn't seem to like draggin stuff
+  })
 })
 
 const session = {

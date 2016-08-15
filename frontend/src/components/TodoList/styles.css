@@ -50,3 +50,12 @@
     text-decoration: line-through;
     color: #B5B5B5;
 }
+.handle {
+    color: #C1BCBC;
+    display: none;
+    user-select: none;
+    cursor: grab;
+}
+.list-item:hover .handle {
+    display: block;
+}

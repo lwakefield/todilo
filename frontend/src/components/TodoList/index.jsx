@@ -4,6 +4,7 @@ import styles from './styles'
 import Todos from 'src/todos'
 import Auth from 'src/auth'
 import Api from 'src/api'
+import Sortable from 'sortablejs'
 
 export default class TodoList extends Component {
   constructor () {
@@ -18,10 +19,39 @@ export default class TodoList extends Component {
   }
   render () {
     return (
-      <ul class={styles.list}>
+      <ul class={styles.list} ref={v => this.initSortable(v)}>
         { this.renderList() }
       </ul>
     )
+  }
+  initSortable (ul) {
+    // eslint-disable-next-line
+    new Sortable(ul, {
+      draggable: `.${styles['list-item']}`,
+      handle: `.${styles.handle}`,
+      onEnd: e => {
+        let start = e.oldIndex < e.newIndex ? e.oldIndex : e.newIndex
+        let end = e.oldIndex > e.newIndex ? e.oldIndex : e.newIndex
+        // We get the chunk that we need to update, and copy with concat
+        let todoChunk = this.state.todos.slice(start, end + 1).concat()
+
+        // Apply the movement
+        let from = e.oldIndex < e.newIndex ? 0 : todoChunk.length - 1
+        let to = e.oldIndex > e.newIndex ? 0 : todoChunk.length - 1
+        todoChunk.splice(to, 0, todoChunk.splice(from, 1)[0])
+
+        // Get the updates to be made
+        const priorities = todoChunk
+        .map(v => v.priority)
+        .sort((a, b) => a - b)
+        const updates = todoChunk.map((v, k) => {
+          return {id: v.id, priority: priorities[k]}
+        })
+
+        Api.bulkUpdate(updates)
+        .then(v => Todos.dispatch('update', v))
+      }
+    })
   }
   renderList () {
     return this.state.todos.map(v => {
@@ -32,6 +62,7 @@ export default class TodoList extends Component {
             checked={v.completed}/>
             <span class={v.completed ? styles.done : ''}>{v.text}</span>
           </label>
+          <span class={styles.handle}>↕</span>
         </li>
       )
     })

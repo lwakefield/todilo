@@ -3,6 +3,7 @@ import styles from './styles'
 
 import Api from 'src/api'
 import Todos from 'src/todos'
+import Auth from 'src/auth'
 
 export default class NewTodoForm extends Component {
   render () {
