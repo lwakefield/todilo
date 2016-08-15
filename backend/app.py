@@ -25,6 +25,7 @@ class User(db.Model):
 class Todo(db.Model):
     text = TextField()
     user = ForeignKeyField(User)
+    priority = IntegerField()
     completed = BooleanField(default=False)
 
 @app.route('/users', methods=['POST'])
@@ -100,7 +101,13 @@ def new_task(user_id):
     completed = data['completed'] if 'completed' in data else False
 
     user = User.get(User.id == user_id)
-    todo = Todo.create(text=text, completed=completed, user=user)
+    priority = Todo.select(fn.Max(Todo.priority)).scalar()
+    priority = 0 if priority == None else priority + 1
+    todo = Todo.create(
+        text=text,
+        completed=completed,
+        user=user,
+        priority=priority)
 
     return jsonify(
         model_to_dict(todo, exclude=[Todo.user])
@@ -111,7 +118,9 @@ def new_task(user_id):
 def get_tasks(user_id):
     if not is_user(user_id): return Response(status=401)
 
-    todos = Todo.select().join(User).where(User.id == user_id)
+    todos = (Todo.select()
+    .where(Todo.user == user_id)
+    .order_by(Todo.priority.asc()))
 
     return jsonify(
         [model_to_dict(t, exclude=[Todo.user]) for t in todos]
@@ -123,7 +132,13 @@ def update_tasks(user_id):
     if not is_user(user_id): return Response(status=401)
 
     data = request.get_json(force=True)
-    Todo.update(**data).where(Todo.user == user_id).execute()
+    if isinstance(data, list):
+        for v in data:
+            if not v['id']: continue
+            Todo.update(**v).where(Todo.user == user_id, Todo.id == v['id']).execute()
+    elif isinstance(data, dict):
+        Todo.update(**data).where(Todo.user == user_id).execute()
+
     todos = Todo.select().where(Todo.user == user_id)
 
     return jsonify(

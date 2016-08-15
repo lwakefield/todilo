@@ -7,6 +7,8 @@ import random
 import string
 
 import app
+
+from peewee import *
 from app import User, Todo, new_user, get_auth_token
 
 def rand_str(n):
@@ -97,10 +99,40 @@ class FlaskrTestCase(unittest.TestCase):
 
         assert Todo.get(Todo.id == data['id']) != None
 
+    def test_new_tasks_have_priority(self):
+        auth_token, user = self.new_session()
+        tasks = [
+            self.give_task(user['id']),
+            self.give_task(user['id']),
+            self.give_task(user['id'])
+        ]
+        priorities = [t.priority for t in Todo.select().where(Todo.user == user['id'])]
+        assert priorities == [0, 1, 2]
+
+    def test_can_bulk_update_individuals(self):
+        auth_token, user = self.new_session()
+        tasks = [
+            self.give_task(user['id']),
+            self.give_task(user['id']),
+            self.give_task(user['id'])
+        ]
+        res = self.app.patch('/users/{0}/tasks'.format(user['id']),
+            headers={'Authorization': 'Bearer {0}'.format(auth_token)},
+            data=dumps([
+                {'id': int(tasks[0]['id']), 'priority': 4},
+                {'id': int(tasks[1]['id']), 'priority': 5},
+                {'id': int(tasks[2]['id']), 'priority': 6}
+            ]))
+        priorities = [t['priority'] for t in loads(res.data)]
+        assert priorities == [4, 5, 6]
+
+
     def give_task(self, user_id):
         user = User.get(User.id == user_id)
         text = rand_str(16)
-        todo = Todo.create(text=text, user=user)
+        priority = Todo.select(fn.Max(Todo.priority)).scalar()
+        priority = 0 if priority == None else priority + 1
+        todo = Todo.create(text=text, user=user, priority=priority)
         return {'id': todo.id, 'text': text}
 
     def test_get_tasks(self):
