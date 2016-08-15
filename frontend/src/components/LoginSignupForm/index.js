@@ -3,6 +3,7 @@ import styles from './styles'
 
 import Api from 'src/api'
 import Auth from 'src/auth'
+import Todos from 'src/todos'
 
 export default class LoginSignupForm extends Component {
   render () {
@@ -35,6 +36,7 @@ export default class LoginSignupForm extends Component {
       this.username.value = ''
       this.password.value = ''
       Auth.dispatch('setAuthToken', v.auth_token)
+      Api.getAllTasks().then(v => Todos.dispatch('update', v))
     })
   }
 }
