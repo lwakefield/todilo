@@ -117,6 +117,20 @@ def get_tasks(user_id):
         [model_to_dict(t, exclude=[Todo.user]) for t in todos]
     )
 
+@app.route('/users/<int:user_id>/tasks', methods=['PATCH'])
+@requires_auth
+def update_tasks(user_id):
+    if not is_user(user_id): return Response(status=401)
+
+    data = request.get_json(force=True)
+    Todo.update(**data).where(Todo.user == user_id).execute()
+    todos = Todo.select().where(Todo.user == user_id)
+
+    return jsonify(
+        [model_to_dict(t, exclude=[Todo.user]) for t in todos]
+    )
+
+
 @app.route('/users/<int:user_id>/tasks/<int:todo_id>', methods=['GET'])
 @requires_auth
 def get_task(user_id, todo_id):

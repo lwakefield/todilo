@@ -1,0 +1,2 @@
+sniffer --test-arg='-s'
+

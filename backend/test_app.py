@@ -120,6 +120,24 @@ class FlaskrTestCase(unittest.TestCase):
         assert data[1] != None
         assert data[2] != None
 
+    def test_update_tasks(self):
+        auth_token, user = self.new_session()
+        tasks = [
+            self.give_task(user['id']),
+            self.give_task(user['id']),
+            self.give_task(user['id'])
+        ]
+
+        res = self.app.patch('/users/{0}/tasks'.format(user['id']),
+            headers={'Authorization': 'Bearer {0}'.format(auth_token)},
+            data=dumps({'completed': True}))
+
+        assert res.status_code == 200
+        data = loads(res.data)
+        assert data[0]['completed'] == True
+        assert data[1]['completed'] == True
+        assert data[2]['completed'] == True
+
     def test_get_task(self):
         auth_token, user = self.new_session()
         todo = self.give_task(user['id'])
