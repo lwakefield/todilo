@@ -1,4 +1,5 @@
 import { h, Component } from 'preact'
+import styles from './styles'
 
 import Api from 'src/api'
 import Auth from 'src/auth'
@@ -6,7 +7,7 @@ import Auth from 'src/auth'
 export default class LoginSignupForm extends Component {
   render () {
     return (
-      <form class="login-signup-form" onSubmit={e => e.preventDefault()}>
+      <form class={styles.form} onSubmit={e => e.preventDefault()}>
         <input type="text" placeholder="user79" name="username"
           ref={v => { this.username = v }}/>
         <input type="password" placeholder="mysecretpassword" name="password"

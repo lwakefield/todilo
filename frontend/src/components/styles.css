@@ -34,7 +34,6 @@ button {
     border: 1px solid #B7B6B6;
     border-radius: 3px;
     padding: 0 10px;
-    height: 40px;
     font-size: 12px;
 }
 input[type="text"],
@@ -49,23 +48,6 @@ button {
     cursor: pointer;
 }
 
-.login-signup-form {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-}
-.login-signup-form input {
-    height: 20px;
-    margin-right: 5px;
-}
-.top-left button {
-    background: none;
-    border: none;
-    padding: 0;
-    height: initial;
-    min-width: initial;
-    color: #3689CE;
-}
 .top-left {
     font-size: 12px;
     padding: 1rem;
@@ -92,12 +74,12 @@ button {
     }
 }
 
-.app-header {
+.header {
     padding: 50px;
     text-align: center;
     border-bottom: dashed 1px #D2D0D0;
 }
-.app-footer {
+.footer {
     color: #999;
     padding: 20px;
     border-top: dashed 1px #D2D0D0;
@@ -105,7 +87,7 @@ button {
     justify-content: space-between;
     align-items: center;
 }
-.complete-all-btn {
+.button {
     background: none;
     border: none;
     padding: 0;

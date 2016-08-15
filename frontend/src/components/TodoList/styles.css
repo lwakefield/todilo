@@ -1,32 +1,32 @@
-.todo-list {
+.list {
     list-style: none;
     margin: 0;
     padding: 0;
     flex-grow: 1;
 }
-.todo {
+.list-item {
     margin: 0;
     display: flex;
     align-items: center;
     height: 50px;
     padding: 0 20px;
 }
-.todo:nth-child(odd) {
+.list-item:nth-child(odd) {
     background-color: #F4F7FA;
 }
-.todo label {
+.list-item label {
     display: flex;
     align-items: center;
     flex-grow: 1;
 }
-.todo input[type="checkbox"] {
+.list-item input[type="checkbox"] {
     margin: 0;
     background: none;
     appearance: none;
     margin-right: 10px;
     outline: none;
 }
-.todo input[type="checkbox"]:after {
+.list-item input[type="checkbox"]:after {
     content: '';
     display: block;
     height: 15px;
@@ -40,13 +40,13 @@
     align-items: center;
     justify-content: center;
 }
-.todo input[type="checkbox"]:checked:after {
+.list-item input[type="checkbox"]:checked:after {
     content: '✓';
     font-size: 22px;
     color: #004066;
     background: linear-gradient(to bottom, #55AED0, #007FAC);
 }
-.todo-done span {
+.done {
     text-decoration: line-through;
     color: #B5B5B5;
 }

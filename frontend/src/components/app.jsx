@@ -2,7 +2,7 @@ import { h, Component } from 'preact'
 import NewTodoForm from 'components/NewTodoForm'
 import TodoList from 'components/TodoList'
 import LoginSignupForm from 'components/LoginSignupForm'
-import './style.css'
+import styles from './styles'
 
 import Api from 'src/api'
 import Auth from 'src/auth'
@@ -23,18 +23,18 @@ export default class App extends Component {
     let tasksRemaining = this.state.todos.filter(v => !v.completed).length
     return (
       <div>
-        <div className="top-left">
+        <div class={styles['top-left']}>
           { this.renderTop() }
         </div>
-        <div class="app">
-          <header class="app-header">
+        <div class={styles.app}>
+          <header class={styles.header}>
             <h1>Todos</h1>
           </header>
           <NewTodoForm/>
           <TodoList/>
-          <footer class="app-footer">
+          <footer class={styles.footer}>
             <span>{tasksRemaining} items left</span>
-            <button class="complete-all-btn"
+            <button class={styles.button}
               onClick={() => this.completeAll()}>Mark all as complete</button>
           </footer>
         </div>

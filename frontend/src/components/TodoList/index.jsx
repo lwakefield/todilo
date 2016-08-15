@@ -1,5 +1,5 @@
 import { h, Component } from 'preact'
-import './style.css'
+import styles from './styles'
 
 import Todos from 'src/todos'
 import Auth from 'src/auth'
@@ -18,20 +18,19 @@ export default class TodoList extends Component {
   }
   render () {
     return (
-      <ul class="todo-list">
+      <ul class={styles.list}>
         { this.renderList() }
       </ul>
     )
   }
   renderList () {
     return this.state.todos.map(v => {
-      const classes = v.completed ? 'todo todo-done' : 'todo'
       return (
-        <li class={classes} key={v.id}>
+        <li class={styles['list-item']} key={v.id}>
           <label>
             <input type="checkbox" onChange={() => this.toggleComplete(v)}
             checked={v.completed}/>
-            <span>{v.text}</span>
+            <span class={v.completed ? styles.done : ''}>{v.text}</span>
           </label>
         </li>
       )

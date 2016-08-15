@@ -1,8 +1,9 @@
-.new-todo-form {
+.form {
     display: flex;
     padding: 20px;
 }
-.new-todo-form input {
+.form input {
     flex-grow: 1;
     margin-right: 10px;
+    height: 40px;
 }

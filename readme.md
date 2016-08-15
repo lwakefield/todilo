@@ -70,3 +70,4 @@ This is what I want the markup to look like.
 - [ ] Todos should have a priority
 - [ ] Error messages
 - [ ] Messages store
+- [ ] Show message when there are no todos

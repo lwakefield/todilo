@@ -1,0 +1,16 @@
+.form {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+.form input {
+    margin-right: 5px;
+}
+.form button {
+    background: none;
+    border: none;
+    padding: 0;
+    height: initial;
+    min-width: initial;
+    color: #3689CE;
+}

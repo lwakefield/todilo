@@ -28,7 +28,7 @@ module.exports = {
     ],
     loaders: [
       { test: /\.jsx?$/, loader: 'babel', exclude: /node_modules/ },
-      { test: /\.css$/, loader: 'style!css!postcss' }
+      { test: /\.css$/, loader: 'style!css?modules=true&localIdentName=[name]__[local]___[hash:base64:5]!postcss' }
     ]
   },
   postcss: function () {
