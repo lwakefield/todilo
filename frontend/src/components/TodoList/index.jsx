@@ -54,6 +54,13 @@ export default class TodoList extends Component {
     })
   }
   renderList () {
+    if (!this.state.todos.length) {
+      return (
+        <li class={styles['nothing-here']}>
+          Get started by adding something todo...
+        </li>
+      )
+    }
     return this.state.todos.map(v => {
       return (
         <li class={styles['list-item']} key={v.id}>
