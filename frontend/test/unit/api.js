@@ -47,4 +47,15 @@ describe('Api', () => {
       done()
     })
   })
+  it('can complete all tasks', done => {
+    Promise.all([
+      Api.newTask({text: 'hello world'}),
+      Api.newTask({text: 'hello world'}),
+      Api.newTask({text: 'hello world'})
+    ]).then(v => Api.completeAll())
+    .then(v => {
+      v.forEach(v1 => expect(v1.completed).to.be.eql(true))
+      done()
+    })
+  })
 })

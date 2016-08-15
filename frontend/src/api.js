@@ -63,6 +63,13 @@ const Api = {
     return patch(
       `${this.endpoint}/users/${claims.id}/tasks/${id}`, task, getAuthHeader()
     )
+  },
+  completeAll () {
+    const claims = getClaims()
+    const update = {completed: true}
+    return patch(
+      `${this.endpoint}/users/${claims.id}/tasks`, update, getAuthHeader()
+    )
   }
 }
 
