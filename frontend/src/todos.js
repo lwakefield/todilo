@@ -1,4 +1,5 @@
 import Store from 'utils/store'
+import Auth from 'src/auth'
 
 const todos = new Store({
   todos: []
@@ -12,6 +13,11 @@ const todos = new Store({
   updateTodo (todo) {
     const index = this.todos.findIndex(v => v.id === todo.id)
     this.todos[index] = todo
+  }
+})
+Auth.subscribe((k, v) => {
+  if (!v.isAuthed) {
+    todos.dispatch('update', [])
   }
 })
 

@@ -68,3 +68,5 @@ This is what I want the markup to look like.
 - [ ] Tasks should be named Todos instead
 - [ ] Title should be 'Todilo'
 - [ ] Todos should have a priority
+- [ ] Error messages
+- [ ] Messages store
