@@ -10,7 +10,7 @@ For the backend:
 
 ```
 cd backend
-pip install pyjwt peewee flask flask-cors gevent
+pip install pyjwt peewee flask flask-cors gevent bcrypt
 ./app.py
 # A server should now be running on http://localhost:5000
 ```
