@@ -34,7 +34,8 @@ export default class App extends Component {
           <TodoList/>
           <footer class="app-footer">
             <span>{tasksRemaining} items left</span>
-            <button class="complete-all-btn">Mark all as complete</button>
+            <button class="complete-all-btn"
+              onClick={() => this.completeAll()}>Mark all as complete</button>
           </footer>
         </div>
       </div>
@@ -49,6 +50,10 @@ export default class App extends Component {
     }
 
     return <LoginSignupForm/>
+  }
+  completeAll () {
+    Api.completeAll()
+    .then(v => Todos.dispatch('update', v))
   }
   logout () {
     Auth.dispatch('setAuthToken', undefined)
