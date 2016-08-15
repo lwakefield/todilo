@@ -1,7 +1,6 @@
 import { h, Component } from 'preact'
 import NewTodoForm from 'components/NewTodoForm'
 import TodoList from 'components/TodoList'
-import LoginSignupForm from 'components/LoginSignupForm'
 import TopBar from 'components/TopBar'
 import styles from './styles'
 
