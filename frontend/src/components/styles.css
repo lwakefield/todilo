@@ -55,6 +55,7 @@ button {
     min-height: 550px;
     display: flex;
     flex-flow: column;
+    position: relative;
 }
 @media (min-width: 500px) {
     .app {
@@ -81,4 +82,21 @@ button {
     padding: 0;
     height: initial;
     color: #3689CE;
+}
+.blur {
+    filter: blur(3px);
+}
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #eee;
+    background: rgba(0,0,0, 0.5);
+    border-radius: 3px;
+    font-size: 2rem;
 }
