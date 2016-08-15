@@ -66,10 +66,10 @@ This is what I want the markup to look like.
 - [ ] - http://docs.peewee-orm.com/projects/flask-peewee/en/latest/rest-api.html
 - There is no list of exceptions in the PeeWee docs?
 - [ ] Tasks should be named Todos instead
-- [ ] Title should be 'Todilo'
-- [ ] Todos should have a priority
+- [x] Title should be 'Todilo'
+- [x] Todos should have a priority
 - [ ] Error messages
 - [ ] Messages store
-- [ ] Show message when there are no todos
-- [ ] Load todos on login
+- [x] Show message when there are no todos
+- [x] Load todos on login
 - [ ] Make sure config isn't set to dev when you deploy
