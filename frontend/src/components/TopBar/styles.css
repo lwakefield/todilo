@@ -1,0 +1,19 @@
+.topbar {
+    font-size: 12px;
+    padding: 1rem;
+}
+@media (min-width: 500px) and (min-height: 550px) {
+    .topbar {
+        position: absolute;
+        top: 0;
+        right: 0;
+    }
+}
+.topbar button {
+    background: none;
+    border: none;
+    padding: 0;
+    height: initial;
+    color: #3689CE;
+    min-width: initial;
+}

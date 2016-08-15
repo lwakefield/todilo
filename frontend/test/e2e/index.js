@@ -89,7 +89,7 @@ const session = {
     browser.click('#new-todo-form button')
     this.tasks.push(text)
     browser.waitUntil(() => {
-      return browser.isExisting(`.todo*=${text}`)
+      return browser.isExisting(`li*=${text}`)
     }, 5000)
     return text
   },

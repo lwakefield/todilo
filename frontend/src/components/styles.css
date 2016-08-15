@@ -48,18 +48,6 @@ button {
     cursor: pointer;
 }
 
-.top-left {
-    font-size: 12px;
-    padding: 1rem;
-}
-@media (min-width: 500px) and (min-height: 550px) {
-    .top-left {
-        position: absolute;
-        top: 0;
-        right: 0;
-    }
-}
-
 .app {
     background-color: #FFFFFF;
     border: 1px solid #E4E4E4;
