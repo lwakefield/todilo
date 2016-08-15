@@ -139,11 +139,7 @@ def update_tasks(user_id):
     elif isinstance(data, dict):
         Todo.update(**data).where(Todo.user == user_id).execute()
 
-    todos = Todo.select().where(Todo.user == user_id)
-
-    return jsonify(
-        [model_to_dict(t, exclude=[Todo.user]) for t in todos]
-    )
+    return get_tasks(user_id)
 
 
 @app.route('/users/<int:user_id>/tasks/<int:todo_id>', methods=['GET'])
