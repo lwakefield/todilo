@@ -70,6 +70,12 @@ const Api = {
     return patch(
       `${this.endpoint}/users/${claims.id}/tasks`, update, getAuthHeader()
     )
+  },
+  bulkUpdate (data) {
+    const claims = getClaims()
+    return patch(
+      `${this.endpoint}/users/${claims.id}/tasks`, data, getAuthHeader()
+    )
   }
 }
 

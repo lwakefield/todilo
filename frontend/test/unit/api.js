@@ -58,4 +58,22 @@ describe('Api', () => {
       done()
     })
   })
+  it('can bulk edit tasks', done => {
+    let ids = []
+    Promise.all([
+      Api.newTask({text: 'hello world'}),
+      Api.newTask({text: 'hello world'}),
+      Api.newTask({text: 'hello world'})
+    ]).then(v => {
+      ids = v.map(v1 => v1.id)
+      let update = v.map((v1, k1) => {
+        return {id: v1.id, priority: k1 + 100}
+      })
+      return Api.bulkUpdate(update)
+    }).then(v => {
+      let priorities = v.filter(v1 => ids.indexOf(v1.id) !== -1).map(v => v.priority)
+      expect(priorities).to.eql([100, 101, 102])
+      done()
+    })
+  })
 })
