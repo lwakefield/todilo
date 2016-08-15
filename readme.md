@@ -71,3 +71,5 @@ This is what I want the markup to look like.
 - [ ] Error messages
 - [ ] Messages store
 - [ ] Show message when there are no todos
+- [ ] Load todos on login
+- [ ] Make sure config isn't set to dev when you deploy
