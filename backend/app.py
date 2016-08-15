@@ -101,7 +101,7 @@ def new_task(user_id):
     completed = data['completed'] if 'completed' in data else False
 
     user = User.get(User.id == user_id)
-    priority = Todo.select(fn.Max(Todo.priority)).scalar()
+    priority = Todo.select(fn.Max(Todo.priority)).where(Todo.user == user_id).scalar()
     priority = 0 if priority == None else priority + 1
     todo = Todo.create(
         text=text,
